@@ -1,23 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, useEffect } from 'react';
+import Home from "./components/Home"
+import axios from 'axios';
+import Pagination from './components/Pagination';
 
 function App() {
+
+  const [data, setData] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [recordPerPage] = useState(10)
+
+  useEffect(() => {
+    axios.get("data.json")
+      .then(res => setData(res.data))
+      .catch(e => { console.error(e) })
+  }, [])
+
+  const lastIndex = currentPage * recordPerPage
+  const firstIndex = lastIndex - recordPerPage
+  const records = data.slice(firstIndex,lastIndex)
+  const npages = Math.ceil(data.length/recordPerPage)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h3>Pagination</h3>
+      <Home data={records} />
+      <Pagination npages = {npages} 
+      currentPage = {currentPage}
+      setCurrentPage= {setCurrentPage} 
+      />
     </div>
   );
 }
