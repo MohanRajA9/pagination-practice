@@ -10,6 +10,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1)
   const [recordPerPage] = useState(10)
 
+  
   useEffect(() => {
     axios.get("data.json")
       .then(res => setData(res.data))
